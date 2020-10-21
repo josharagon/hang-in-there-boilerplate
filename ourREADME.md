@@ -7,10 +7,10 @@ Our poster project allows users to create random posters. The user then can save
 - Access to the
 [website](https://josharagon.github.io/hang-in-there-boilerplate/)
 
-- Access to the [repository](https://github.com/josharagon/hang-in-there-boilerplate)
+- Access to our [repository](https://github.com/josharagon/hang-in-there-boilerplate)
 
 ## Instructions
-- Clone the repository: git [clone](https://github.com/turingschool-examples/hang-in-there-boilerplate)
+- Clone the template repository: git [clone](https://github.com/turingschool-examples/hang-in-there-boilerplate)
 - Move into that directory: cd into hang-in-there
 - run open index.html to run the app!
 
