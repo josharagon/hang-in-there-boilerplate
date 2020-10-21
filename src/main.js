@@ -20,6 +20,7 @@ var quoteInput = document.querySelector('#poster-quote');
 var savePoster = document.querySelector('.save-poster');
 var imgGallery = document.querySelector('.saved-posters-grid');
 
+
 // we've provided you with some data to work with 👇
 
 var images = [
@@ -131,6 +132,9 @@ backToMain.addEventListener('click', backHome);
 displayPoster.addEventListener('click', makeUserPoster);
 savePoster.addEventListener('click', storePoster);
 imgGallery.addEventListener('dblclick', removePoster);
+posterImage.addEventListener('click', swapImage);
+posterTitle.addEventListener('click', swapTitle);
+posterQuote.addEventListener('click', swapQuote);
 
 // functions and event handlers go here 👇
 // (we've provided one for you to get you started)!
@@ -146,29 +150,23 @@ function makeRandomCover() {
     currentPoster = new Poster(posterImage.src, posterTitle.innerHTML, posterQuote.innerHTML);
 }
 
-function showPage(toSee) {
-    toSee.classList.remove('hidden');
-}
 
-function hidePage(toHide) {
-    toHide.classList.add('hidden');
+function switchPage(hidePage, showPage){
+  hidePage.classList.add('hidden');
+  showPage.classList.remove('hidden');
 }
 
 function showForm() {
-    hidePage(homePoster);
-    showPage(posterForm);
-}
+    switchPage(homePoster, posterForm);
+};
 
 function goHome() {
-    hidePage(posterForm);
-    showPage(homePoster);
-}
+    switchPage(posterForm, homePoster);
+};
 
 function backHome() {
-    hidePage(storedPosters);
-    showPage(homePoster);
-
-}
+  switchPage(storedPosters, homePoster);
+};
 
 function showPoster(obj) {
     posterImage.src = obj.imageURL;
@@ -177,28 +175,38 @@ function showPoster(obj) {
 }
 
 function makeUserPoster() {
-    event.preventDefault();
-    images.push(imageInput.value);
-    titles.push(titleInput.value);
-    quotes.push(quoteInput.value);
-    currentPoster = new Poster(imageInput.value, titleInput.value, quoteInput.value);
-    showPoster(currentPoster)
-    goHome();
-}
+event.preventDefault();
+  if (imageInput.value === '') {
+    alert('You need to input an image address!');
+  } else if (!imageInput.value.endsWith('.jpg') && !imageInput.value.endsWith('.png')) {
+      alert('You need a valid image link! (.jpg or .png)');
+  } else if (titleInput.value === '') {
+      alert('You need to input a title!');
+  } else if (quoteInput.value === '') {
+      alert('You need to input a quote!');
+  } else {
+      images.push(imageInput.value);
+      titles.push(titleInput.value);
+      quotes.push(quoteInput.value);
+      currentPoster = new Poster(imageInput.value, titleInput.value, quoteInput.value);
+      showPoster(currentPoster);
+      goHome();
+  };
+};
 
 function storePoster() {
-    if (!savedPosters.includes(currentPoster)) {
-        savedPosters.push(currentPoster);
-    } else {
-        alert('You already saved that poster!')
-    };
+  if (!savedPosters.includes(currentPoster)) {
+      savedPosters.push(currentPoster);
+  } else {
+      alert('You already saved that poster!');
+  };
 };
 
 function showStored() {
     var miniDisplay = '';
     for (var i = 0; i < savedPosters.length; i++) {
         var littlePoster =
-            `<div class="mini-poster" id=${savedPosters[i].id}>
+            `<div class="mini-poster" id=${savedPosters[i].id} draggable="true" ondragstart="drag(event)">
               <img class="mini-poster" id=${savedPosters[i].id} src=${savedPosters[i].imageURL} alt="nothin' to see here">
               <h2 class="poster-title" id=${savedPosters[i].id}>${savedPosters[i].title}</h2>
               <h4 class="poster-quote" id=${savedPosters[i].id}>${savedPosters[i].quote}</h4>
@@ -207,15 +215,28 @@ function showStored() {
     };
     imgGallery.innerHTML = miniDisplay;
     storedPosters.classList.remove('hidden');
-    homePoster.classList.add('hidden')
+    homePoster.classList.add('hidden');
 };
 
 function removePoster() {
     var delPoster = event.target.id;
     for (var i = 0; i < savedPosters.length; i++) {
         if (delPoster == savedPosters[i].id) {
-            savedPosters.splice(i, 1)
+            savedPosters.splice(i, 1);
         };
     };
     showStored();
+};
+
+function swapImage() {
+  posterImage.src = images[getRandomIndex(images)];
+  currentPoster = new Poster(posterImage.src, posterTitle.innerHTML, posterQuote.innerHTML);
+};
+function swapTitle() {
+  posterTitle.innerHTML = titles[getRandomIndex(titles)];
+  currentPoster = new Poster(posterImage.src, posterTitle.innerHTML, posterQuote.innerHTML);
+};
+function swapQuote() {
+  posterQuote.innerHTML = quotes[getRandomIndex(quotes)];
+  currentPoster = new Poster(posterImage.src, posterTitle.innerHTML, posterQuote.innerHTML);
 };
